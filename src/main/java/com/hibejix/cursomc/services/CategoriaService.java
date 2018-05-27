@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.hibejix.cursomc.domain.Categoria;
 import com.hibejix.cursomc.repositories.CategoriaRepository;
+import com.hibejix.cursomc.services.exceptions.CategoriaNotFoundException;
 
 /**
  * @author msalvador
@@ -24,6 +25,7 @@ public class CategoriaService {
 	public Categoria buscar(final Integer id) {
 		
 		Optional<Categoria> categoria = repository.findById(id);
-		return categoria.orElse(null);
+		return categoria.orElseThrow(() -> new CategoriaNotFoundException(
+				"Categoria não encontrada! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 	}
 }
