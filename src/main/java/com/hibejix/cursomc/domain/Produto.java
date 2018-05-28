@@ -18,7 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author msalvador
@@ -35,25 +35,21 @@ public class Produto implements Serializable{
 	private String nome;
 	private Double preco;
 	
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name="PRODUTO_CATEGORIA", 
-		joinColumns = @JoinColumn(name="poduto_id"),
-		inverseJoinColumns = @JoinColumn(name="categoria_id")
+	@JoinTable(name = "PRODUTO_CATEGORIA",
+		joinColumns = @JoinColumn(name = "produto_id"),
+		inverseJoinColumns = @JoinColumn(name = "categoria_id")
 	)
 	private List<Categoria> categorias = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="id.produto")
 	private Set<ItemPedido> itens = new HashSet<>();
 	
 	public Produto() {
 	}
 
-	/**
-	 * @param id
-	 * @param nome
-	 * @param preco
-	 */
 	public Produto(Integer id, String nome, Double preco) {
 		super();
 		this.id = id;
@@ -61,84 +57,56 @@ public class Produto implements Serializable{
 		this.preco = preco;
 	}
 
+	@JsonIgnore
 	public List<Pedido> getPedidos() {
 		List<Pedido> lista = new ArrayList<>();
-		for(ItemPedido ip: itens) {
-			lista.add(ip.getPedido());
+		for (ItemPedido x : itens) {
+			lista.add(x.getPedido());
 		}
 		return lista;
 	}
 	
-	/**
-	 * @return the id
-	 */
+	
 	public Integer getId() {
 		return id;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return the nome
-	 */
 	public String getNome() {
 		return nome;
 	}
 
-	/**
-	 * @param nome the nome to set
-	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-	/**
-	 * @return the preco
-	 */
 	public Double getPreco() {
 		return preco;
 	}
 
-	/**
-	 * @param preco the preco to set
-	 */
 	public void setPreco(Double preco) {
 		this.preco = preco;
 	}
 
-	/**
-	 * @return the categorias
-	 */
 	public List<Categoria> getCategorias() {
 		return categorias;
 	}
 
-	/**
-	 * @param categorias the categorias to set
-	 */
 	public void setCategorias(List<Categoria> categorias) {
 		this.categorias = categorias;
 	}
 
-	/**
-	 * @return the itens
-	 */
 	public Set<ItemPedido> getItens() {
 		return itens;
 	}
 
-	/**
-	 * @param itens the itens to set
-	 */
 	public void setItens(Set<ItemPedido> itens) {
 		this.itens = itens;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -18,6 +18,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 /**
  * @author marcelo
  *
@@ -26,130 +29,87 @@ import javax.persistence.OneToOne;
 public class Pedido implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	
+	@JsonFormat(pattern="dd/MM/yyyy hh:mm")
 	private Date instante;
-
+	
 	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
 	private Pagamento pagamento;
-	
-	@ManyToOne
-	@JoinColumn(name="endereco_entrega_id")
-	private Endereco enderecoEntrega;
-	
+
 	@ManyToOne
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
-
+	
+	@ManyToOne
+	@JoinColumn(name="endereco_de_entrega_id")
+	private Endereco enderecoDeEntrega;
+	
 	@OneToMany(mappedBy="id.pedido")
 	private Set<ItemPedido> itens = new HashSet<>();
 	
-	/**
-	 * 
-	 */
 	public Pedido() {
 	}
 
-	/**
-	 * @param id
-	 * @param instante
-	 * @param enderecoEntrega
-	 * @param cliente
-	 */
-	public Pedido(Integer id, Date instante, Endereco enderecoEntrega, Cliente cliente) {
+	public Pedido(Integer id, Date instante, Cliente cliente, Endereco enderecoDeEntrega) {
 		super();
 		this.id = id;
 		this.instante = instante;
-		this.enderecoEntrega = enderecoEntrega;
 		this.cliente = cliente;
+		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 
-	/**
-	 * @return the id
-	 */
 	public Integer getId() {
 		return id;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return the instante
-	 */
 	public Date getInstante() {
 		return instante;
 	}
 
-	/**
-	 * @param instante the instante to set
-	 */
 	public void setInstante(Date instante) {
 		this.instante = instante;
 	}
-	
-	/**
-	 * @return the pagamento
-	 */
+
 	public Pagamento getPagamento() {
 		return pagamento;
 	}
 
-	/**
-	 * @param pagamento the pagamento to set
-	 */
 	public void setPagamento(Pagamento pagamento) {
 		this.pagamento = pagamento;
 	}
-	
-	/**
-	 * @return the enderecoEntrega
-	 */
-	public Endereco getEnderecoEntrega() {
-		return enderecoEntrega;
-	}
 
-	/**
-	 * @param enderecoEntrega the enderecoEntrega to set
-	 */
-	public void setEnderecoEntrega(Endereco enderecoEntrega) {
-		this.enderecoEntrega = enderecoEntrega;
-	}
-
-	/**
-	 * @return the cliente
-	 */
 	public Cliente getCliente() {
 		return cliente;
 	}
 
-	/**
-	 * @param cliente the cliente to set
-	 */
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
 
-	/**
-	 * @return the itens
-	 */
+	public Endereco getEnderecoDeEntrega() {
+		return enderecoDeEntrega;
+	}
+
+	public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
+		this.enderecoDeEntrega = enderecoDeEntrega;
+	}
+
 	public Set<ItemPedido> getItens() {
 		return itens;
 	}
 
-	/**
-	 * @param itens the itens to set
-	 */
 	public void setItens(Set<ItemPedido> itens) {
 		this.itens = itens;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

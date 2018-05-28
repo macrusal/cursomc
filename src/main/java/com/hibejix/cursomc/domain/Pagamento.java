@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hibejix.cursomc.domain.enums.EstadoPagamento;
 
 /**
@@ -23,30 +24,21 @@ import com.hibejix.cursomc.domain.enums.EstadoPagamento;
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class Pagamento implements Serializable{
 	
-	private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
 	
 	@Id
 	private Integer id;
 	private Integer estado;
 
-	@OneToOne	
+	@JsonIgnore
+	@OneToOne
 	@JoinColumn(name="pedido_id")
 	@MapsId
 	private Pedido pedido;
 	
-	/**
-	 * 
-	 */
 	public Pagamento() {
 	}
 
-	/**
-	 * @param id
-	 * @param estado
-	 * @param pedido
-	 * @param cliente
-	 * @param enderecoEntrega
-	 */
 	public Pagamento(Integer id, EstadoPagamento estado, Pedido pedido) {
 		super();
 		this.id = id;
@@ -54,44 +46,26 @@ public abstract class Pagamento implements Serializable{
 		this.pedido = pedido;
 	}
 
-	/**
-	 * @return the id
-	 */
 	public Integer getId() {
 		return id;
 	}
 
-	/**
-	 * @param id the id to set
-	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return the estado
-	 */
 	public EstadoPagamento getEstado() {
 		return EstadoPagamento.toEnum(estado);
 	}
 
-	/**
-	 * @param estado the estado to set
-	 */
 	public void setEstado(EstadoPagamento estado) {
 		this.estado = estado.getCodigo();
 	}
 
-	/**
-	 * @return the pedido
-	 */
 	public Pedido getPedido() {
 		return pedido;
 	}
 
-	/**
-	 * @param pedido the pedido to set
-	 */
 	public void setPedido(Pedido pedido) {
 		this.pedido = pedido;
 	}
@@ -120,5 +94,4 @@ public abstract class Pagamento implements Serializable{
 			return false;
 		return true;
 	}
-
 }
