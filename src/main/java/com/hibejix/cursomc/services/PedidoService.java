@@ -22,7 +22,7 @@ public class PedidoService {
 	@Autowired
 	PedidoRepository repository;
 	
-	public Pedido buscar(final Integer id) {
+	public Pedido find(final Integer id) {
 		
 		Optional<Pedido> pedido = repository.findById(id);
 		return pedido.orElseThrow(() -> new PedidoNotFoundException(

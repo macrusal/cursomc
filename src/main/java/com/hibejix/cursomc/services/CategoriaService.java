@@ -22,7 +22,7 @@ public class CategoriaService {
 	@Autowired
 	CategoriaRepository repository;
 	
-	public Categoria buscar(final Integer id) {
+	public Categoria find(final Integer id) {
 		
 		Optional<Categoria> categoria = repository.findById(id);
 		return categoria.orElseThrow(() -> new CategoriaNotFoundException(
@@ -35,6 +35,15 @@ public class CategoriaService {
 	 */
 	public Categoria insert(Categoria categoria) {
 		categoria.setId(null);
+		return repository.save(categoria);
+	}
+
+	/**
+	 * @param categoria
+	 * @return
+	 */
+	public Categoria update(Categoria categoria) {
+		find(categoria.getId());
 		return repository.save(categoria);
 	}
 }
