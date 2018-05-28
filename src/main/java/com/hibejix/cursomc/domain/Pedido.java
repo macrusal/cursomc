@@ -5,6 +5,8 @@ package com.hibejix.cursomc.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -40,6 +43,9 @@ public class Pedido implements Serializable{
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
 
+	@OneToMany(mappedBy="id.pedido")
+	private Set<ItemPedido> itens = new HashSet<>();
+	
 	/**
 	 * 
 	 */
@@ -59,8 +65,6 @@ public class Pedido implements Serializable{
 		this.enderecoEntrega = enderecoEntrega;
 		this.cliente = cliente;
 	}
-
-
 
 	/**
 	 * @return the id
@@ -102,6 +106,48 @@ public class Pedido implements Serializable{
 	 */
 	public void setPagamento(Pagamento pagamento) {
 		this.pagamento = pagamento;
+	}
+	
+	/**
+	 * @return the enderecoEntrega
+	 */
+	public Endereco getEnderecoEntrega() {
+		return enderecoEntrega;
+	}
+
+	/**
+	 * @param enderecoEntrega the enderecoEntrega to set
+	 */
+	public void setEnderecoEntrega(Endereco enderecoEntrega) {
+		this.enderecoEntrega = enderecoEntrega;
+	}
+
+	/**
+	 * @return the cliente
+	 */
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	/**
+	 * @param cliente the cliente to set
+	 */
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	/**
+	 * @return the itens
+	 */
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
+
+	/**
+	 * @param itens the itens to set
+	 */
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
 	}
 
 	@Override
