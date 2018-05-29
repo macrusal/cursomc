@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.hibejix.cursomc.domain.Categoria;
+import com.hibejix.cursomc.dto.CategoriaDTO;
 import com.hibejix.cursomc.repositories.CategoriaRepository;
 import com.hibejix.cursomc.services.exceptions.CategoriaNotFoundException;
 import com.hibejix.cursomc.services.exceptions.DataIntegrityException;
@@ -85,5 +86,13 @@ public class CategoriaService {
 	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = new PageRequest(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repository.findAll(pageRequest);
+	}
+	
+	/**
+	 * @param 
+	 * @return
+	 */
+	public Categoria fromDTO(CategoriaDTO dto) {
+		return new Categoria(dto.getId(), dto.getNome());
 	}
 }
