@@ -54,8 +54,9 @@ public class CategoriaService {
 	 * @return
 	 */
 	public Categoria update(Categoria categoria) {
-		find(categoria.getId());
-		return repository.save(categoria);
+		Categoria categoriaNova = find(categoria.getId());
+		updateData(categoriaNova, categoria);
+		return repository.save(categoriaNova);
 	}
 
 	/**
@@ -84,6 +85,7 @@ public class CategoriaService {
 	 * @return
 	 */
 	public Page<Categoria> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		@SuppressWarnings("deprecation")
 		PageRequest pageRequest = new PageRequest(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repository.findAll(pageRequest);
 	}
@@ -95,4 +97,11 @@ public class CategoriaService {
 	public Categoria fromDTO(CategoriaDTO dto) {
 		return new Categoria(dto.getId(), dto.getNome());
 	}
+	
+
+	private void updateData(Categoria categoriaNova, Categoria categoria) {
+		categoriaNova.setNome(categoria.getNome());
+	}
+
+
 }

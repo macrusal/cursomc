@@ -42,7 +42,7 @@ private static final long serialVersionUID = 1L;
 	public Pagamento(Integer id, EstadoPagamento estado, Pedido pedido) {
 		super();
 		this.id = id;
-		this.estado = estado.getCodigo();
+		this.estado = (estado == null) ? null : estado.getCodigo();
 		this.pedido = pedido;
 	}
 
