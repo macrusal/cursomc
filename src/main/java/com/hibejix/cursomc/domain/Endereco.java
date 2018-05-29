@@ -164,20 +164,6 @@ public class Endereco  implements Serializable{
 		this.cliente = cliente;
 	}
 
-	/**
-	 * @return the cidade
-	 */
-	public Cidade getCidade() {
-		return cidade;
-	}
-
-	/**
-	 * @param cidade the cidade to set
-	 */
-	public void setCidade(Cidade cidade) {
-		this.cidade = cidade;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

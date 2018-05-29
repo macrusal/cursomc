@@ -3,6 +3,7 @@
  */
 package com.hibejix.cursomc.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.hibejix.cursomc.domain.Cliente;
 import com.hibejix.cursomc.dto.ClienteDTO;
+import com.hibejix.cursomc.dto.ClienteNewDTO;
 import com.hibejix.cursomc.services.ClienteService;
 
 /**
@@ -38,6 +41,15 @@ public class ClienteResource {
 	
 		Cliente cliente = service.find(id);
 		return ResponseEntity.ok().body(cliente);
+	}
+	
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO clienteDTO) {
+		Cliente cliente = service.fromDTO(clienteDTO);
+		cliente = service.insert(cliente);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+					.buildAndExpand(cliente.getId()).toUri();
+		return ResponseEntity.created(uri).build();
 	}
 	
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
