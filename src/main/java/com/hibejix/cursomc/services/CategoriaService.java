@@ -6,11 +6,13 @@ package com.hibejix.cursomc.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.hibejix.cursomc.domain.Categoria;
 import com.hibejix.cursomc.repositories.CategoriaRepository;
 import com.hibejix.cursomc.services.exceptions.CategoriaNotFoundException;
+import com.hibejix.cursomc.services.exceptions.DataIntegrityException;
 
 /**
  * @author msalvador
@@ -22,6 +24,10 @@ public class CategoriaService {
 	@Autowired
 	CategoriaRepository repository;
 	
+	/**
+	 * @param id
+	 * @return
+	 */
 	public Categoria find(final Integer id) {
 		
 		Optional<Categoria> categoria = repository.findById(id);
@@ -45,5 +51,18 @@ public class CategoriaService {
 	public Categoria update(Categoria categoria) {
 		find(categoria.getId());
 		return repository.save(categoria);
+	}
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	public void delete(Integer id) {
+		find(id);
+		try {
+			repository.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possível excluir uma Categoria que possui Produtos associados!");
+		}
 	}
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.hibejix.cursomc.services.exceptions.CategoriaNotFoundException;
+import com.hibejix.cursomc.services.exceptions.DataIntegrityException;
 
 
 /**
@@ -27,6 +28,15 @@ public class ResourceExceptionHandler {
 												e.getMessage(), 
 												System.currentTimeMillis());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+	}
+	
+	@ExceptionHandler(DataIntegrityException.class)
+	public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException e, HttpServletRequest request) {
+
+		StandardError error = new StandardError(HttpStatus.BAD_REQUEST.value(), 
+												e.getMessage(), 
+												System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
 	
 }
