@@ -30,7 +30,7 @@ import com.hibejix.cursomc.services.ClienteService;
  *
  */
 @RestController
-@RequestMapping(value="/clientes")
+@RequestMapping(value="/hibejix-comercio/clientes")
 public class ClienteResource {
 	
 	@Autowired

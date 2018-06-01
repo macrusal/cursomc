@@ -24,17 +24,22 @@ import com.hibejix.cursomc.domain.Categoria;
 import com.hibejix.cursomc.dto.CategoriaDTO;
 import com.hibejix.cursomc.services.CategoriaService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * @author msalvador
  *
  */
+@Api(value="API REST - Categorias")
 @RestController
-@RequestMapping(value="/categorias")
+@RequestMapping(value="/hibejix-comercio/categorias")
 public class CategoriaResource {
 	
 	@Autowired
 	CategoriaService service;
 	
+	@ApiOperation(value="Retorna a categoria baseada em um Id")
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseEntity<Categoria> find(@PathVariable final Integer id) {
 	
@@ -42,6 +47,7 @@ public class CategoriaResource {
 		return ResponseEntity.ok().body(categoria);
 	}
 	
+	@ApiOperation(value="Cadastra uma nova categoria")
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO categoriaDTO) {
 		Categoria categoria = service.fromDTO(categoriaDTO);
@@ -51,6 +57,7 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@ApiOperation(value="Atualiza a categoria baseada em um Id")
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO categoriaDTO, @PathVariable final Integer id) {
 		Categoria categoria = service.fromDTO(categoriaDTO);
@@ -60,12 +67,14 @@ public class CategoriaResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@ApiOperation(value="Deleta a categoria baseada em um Id")
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable final Integer id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
+	@ApiOperation(value="Retorna uma lista com todas as categorias")
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> findAll() {
 	
@@ -74,6 +83,7 @@ public class CategoriaResource {
 		return ResponseEntity.ok().body(categoriasDTO);
 	}
 
+	@ApiOperation(value="Retorna uma lista paginada com todas as categorias")
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value="/page", method=RequestMethod.GET)
 	public ResponseEntity<Page> findPage(

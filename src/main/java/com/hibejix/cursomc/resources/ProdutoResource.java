@@ -24,7 +24,7 @@ import com.hibejix.cursomc.services.ProdutoService;
  *
  */
 @RestController
-@RequestMapping(value="/produtos")
+@RequestMapping(value="/hibejix-comercio/produtos")
 public class ProdutoResource {
 	
 	@Autowired

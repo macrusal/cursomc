@@ -24,7 +24,7 @@ import com.hibejix.cursomc.services.PedidoService;
  *
  */
 @RestController
-@RequestMapping(value="/pedidos")
+@RequestMapping(value="/hibejix-comercio/pedidos")
 public class PedidoResource {
 	
 	@Autowired
