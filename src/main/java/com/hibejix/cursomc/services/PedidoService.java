@@ -8,17 +8,14 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.hibejix.cursomc.domain.*;
+import com.hibejix.cursomc.repositories.*;
+import com.hibejix.cursomc.services.exceptions.ClienteNotFoundException;
+import com.hibejix.cursomc.services.exceptions.ProdutoNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hibejix.cursomc.domain.ItemPedido;
-import com.hibejix.cursomc.domain.PagamentoComBoleto;
-import com.hibejix.cursomc.domain.Pedido;
 import com.hibejix.cursomc.domain.enums.EstadoPagamento;
-import com.hibejix.cursomc.repositories.ItemPedidoRepository;
-import com.hibejix.cursomc.repositories.PagamentoRepository;
-import com.hibejix.cursomc.repositories.PedidoRepository;
-import com.hibejix.cursomc.repositories.ProdutoRepository;
 import com.hibejix.cursomc.services.exceptions.PedidoNotFoundException;
 
 /**
@@ -42,6 +39,9 @@ public class PedidoService {
 	
 	@Autowired
 	BoletoService boletoService;
+
+	@Autowired
+	ClienteRepository clienteRepository;
 	
 	public Pedido find(final Integer id) {
 		
@@ -53,6 +53,7 @@ public class PedidoService {
 	public @Valid Pedido insert(@Valid Pedido pedido) {
 		pedido.setId(null);
 		pedido.setInstante(new Date());
+		pedido.setCliente(obterClientePorId(pedido.getCliente().getId()));
 		pedido.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		pedido.getPagamento().setPedido(pedido);
 		if(pedido.getPagamento() instanceof PagamentoComBoleto) {
@@ -63,10 +64,24 @@ public class PedidoService {
 		pagamentoRepository.save(pedido.getPagamento());
 		for(ItemPedido item : pedido.getItens()) {
 			item.setDesconto(0.0);
-			item.setPreco(produtoRepository.findById(item.getProduto().getId()).get().getPreco());
+			item.setProduto(obterProdutoPorId(item.getProduto().getId()));
+			item.setPreco(item.getProduto().getPreco());
 			item.setPedido(pedido);
 		}
 		itemPedidoRepository.saveAll(pedido.getItens());
+		System.out.println(pedido);
 		return pedido;
+	}
+
+	private Produto obterProdutoPorId(final Integer id) {
+		Optional<Produto> produto = produtoRepository.findById(id);
+		return produto.orElseThrow(() -> new ProdutoNotFoundException(
+				"Produto não encontrado! Id: " + id + ", Tipo: " + Produto.class.getName()));
+	}
+
+	private Cliente obterClientePorId(final Integer id) {
+		Optional<Cliente> cliente = clienteRepository.findById(id);
+		return cliente.orElseThrow(() -> new ClienteNotFoundException(
+				"Cliente não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
 	}
 }
