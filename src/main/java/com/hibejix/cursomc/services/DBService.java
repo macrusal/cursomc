@@ -126,7 +126,7 @@ public class DBService {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
-		Cliente cli1 = new Cliente(null, "Marcelo Salvador", "marcelo@email.com", "81572727853", TipoCliente.PESSOAFISICA);
+		Cliente cli1 = new Cliente(null, "Marcelo Salvador", "macrusal@gmail.com", "81572727853", TipoCliente.PESSOAFISICA);
 		cli1.getTelefones().addAll(Arrays.asList("24097712","997768750"));
 		
 		Endereco e1 = new Endereco(null, "Rua das Quinta", "76", "Casa 2", "Santana", "02345010", cli1, c1);
