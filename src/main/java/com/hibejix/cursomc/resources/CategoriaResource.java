@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +47,8 @@ public class CategoriaResource {
 		Categoria categoria = service.find(id);
 		return ResponseEntity.ok().body(categoria);
 	}
-	
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@ApiOperation(value="Cadastra uma nova categoria")
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO categoriaDTO) {
@@ -57,6 +59,7 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@ApiOperation(value="Atualiza a categoria baseada em um Id")
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO categoriaDTO, @PathVariable final Integer id) {
@@ -66,7 +69,8 @@ public class CategoriaResource {
 		
 		return ResponseEntity.noContent().build();
 	}
-	
+
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@ApiOperation(value="Deleta a categoria baseada em um Id")
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable final Integer id) {
