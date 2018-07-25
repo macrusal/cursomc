@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import com.hibejix.cursomc.domain.enums.Perfil;
+import com.hibejix.cursomc.security.UserSpringSecurity;
+import com.hibejix.cursomc.services.exceptions.AuthorizationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -47,7 +50,14 @@ public class ClienteService {
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	public Cliente find(final Integer id) {
-		
+
+		UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+		if(userSpringSecurity == null || !userSpringSecurity.hasRole(Perfil.ADMIN)
+				&& !id.equals(userSpringSecurity.getId())) {
+			throw new AuthorizationException("Acesso negado!");
+		}
+
 		Optional<Cliente> cliente = clienteRepository.findById(id);
 		return cliente.orElseThrow(() -> new ClienteNotFoundException(
 				"Cliente não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
