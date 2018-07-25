@@ -10,9 +10,14 @@ import javax.validation.Valid;
 
 import com.hibejix.cursomc.domain.*;
 import com.hibejix.cursomc.repositories.*;
+import com.hibejix.cursomc.security.UserSpringSecurity;
+import com.hibejix.cursomc.services.exceptions.AuthorizationException;
 import com.hibejix.cursomc.services.exceptions.ClienteNotFoundException;
 import com.hibejix.cursomc.services.exceptions.ProdutoNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.hibejix.cursomc.domain.enums.EstadoPagamento;
@@ -86,5 +91,18 @@ public class PedidoService {
 		Optional<Cliente> cliente = clienteRepository.findById(id);
 		return cliente.orElseThrow(() -> new ClienteNotFoundException(
 				"Cliente não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
+	}
+
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSpringSecurity userSpringSecurity = UserService.authenticated();
+		if (userSpringSecurity == null) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		PageRequest pageRequest = new PageRequest(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+
+		Optional<Cliente> cliente = clienteRepository.findById(userSpringSecurity.getId());
+
+		return pedidoRepository.findByCliente(cliente.orElseThrow(() -> new ClienteNotFoundException(
+				"Cliente não encontrado! Id: " + cliente.get().getId() + ", Tipo: " + Cliente.class.getName())), pageRequest);
 	}
 }
