@@ -53,7 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	};
 
 	private static final String[] PUBLIC_MATCHERS_POST = {
-			"/hibejix-comercio/clientes/**"
+			"/hibejix-comercio/clientes/**",
+			"/hibejix-comercio/auth/**",
+			"/hibejix-comercio/auth/forgot/**"
+
 	};
 
 	@Override
@@ -66,6 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		httpSecurity.cors().and().csrf().disable();
 		httpSecurity.authorizeRequests()
 		.antMatchers(HttpMethod.GET,PUBLIC_MATCHERS_GET).permitAll()
+		.antMatchers(HttpMethod.POST,PUBLIC_MATCHERS_POST).permitAll()
 		.antMatchers(PUBLIC_MATCHERS).permitAll()
 		.anyRequest().authenticated();
 		httpSecurity.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
@@ -87,6 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+
 		return new BCryptPasswordEncoder();
 	}
 }
