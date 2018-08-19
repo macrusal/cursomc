@@ -46,4 +46,8 @@ public class ProdutoService {
 		
 		return produtoRepository.search(nome, categorias, pageRequest);
 	}
+
+	public List<Produto> findAll() {
+		return produtoRepository.findAll();
+	}
 }

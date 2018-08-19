@@ -4,6 +4,7 @@
 package com.hibejix.cursomc.resources;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,7 +38,7 @@ public class ProdutoResource {
 		return ResponseEntity.ok().body(produto);
 	}
 
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(value="/page", method=RequestMethod.GET)
 	public ResponseEntity<Page<ProdutoDTO>> findPage(
 			@RequestParam(value="nome", defaultValue="") String nome,
 			@RequestParam(value="categorias", defaultValue="") String categorias, 
@@ -49,6 +50,13 @@ public class ProdutoResource {
 		List<Integer> ids = URL.decodeList(categorias);
 		Page<Produto> produtos = service.search(nomeDecoded, ids, page, linesPerPage, orderBy, direction);
 		Page<ProdutoDTO> produtosDTO = produtos.map(produto -> new ProdutoDTO(produto)); 
+		return ResponseEntity.ok().body(produtosDTO);
+	}
+
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<ProdutoDTO>> findAll() {
+		List<Produto> produtos = service.findAll();
+		List<ProdutoDTO> produtosDTO = produtos.stream().map(produto -> new ProdutoDTO(produto)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(produtosDTO);
 	}
 }
