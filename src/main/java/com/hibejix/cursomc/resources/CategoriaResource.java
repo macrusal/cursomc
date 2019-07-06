@@ -35,7 +35,7 @@ import io.swagger.annotations.ApiOperation;
 @Api(value="API REST - Categorias")
 @RestController
 @RequestMapping(value="/hibejix-comercio/categorias")
-public class CategoriaResource {
+public class  CategoriaResource {
 	
 	@Autowired
 	CategoriaService service;
